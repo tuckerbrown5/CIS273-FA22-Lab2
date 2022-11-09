@@ -54,25 +54,91 @@ public class Program
 
     private static bool Matches(char closing, char opening)
     {
-        throw new NotImplementedException();
+        if (opening=='(' && closing == ')')
+        {
+            return true;
+        }
+        if (opening == '[' && closing == ']')
+        {
+            return true;
+        }
+        if (opening == '<' && closing == '>')
+        {
+            return true;
+        }
+        if (opening == '{' && closing == '}')
+        {
+            return true;
+        }
+        return false;
     }
 
 
     public static double? Evaluate(string s)
     {
+        Stack<string> stack = new Stack<string>();
+
+
         // parse string into tokens
         string[] tokens = s.Split();
 
-        // foreach token
-        // if it's a number, push to stack
+        foreach ( var T in tokens)
+        {
+            double numericValue;
+            bool isnumeric = double.TryParse(T, out numericValue);
 
-        // if it's a math operator, pop twice;
-        // compute result;
-        // push result onto stack
+            if (isnumeric == true)
+            {
+                stack.Push(numericValue.ToString());
+            }
 
-        // return top of stack (if the stack has 1 element)
+            else
+            {
+                if( T == "+")
+                {
+                    double x = Convert.ToDouble(stack.Pop());
+                    double y = Convert.ToDouble(stack.Pop());
 
-        return null;
+                    stack.Push((y + x).ToString());
+                }
+
+                else if(T=="-")
+                {
+                    double x = Convert.ToDouble(stack.Pop());
+                    double y = Convert.ToDouble(stack.Pop());
+
+                    stack.Push((y - x).ToString());
+
+                }
+                else if (T=="*")
+                {
+                    double x = Convert.ToDouble(stack.Pop());
+                    double y = Convert.ToDouble(stack.Pop());
+
+                    stack.Push((y * x).ToString());
+
+                }
+                else if (T=="/")
+                {
+                    double x = Convert.ToDouble(stack.Pop());
+                    double y = Convert.ToDouble(stack.Pop());
+
+                    stack.Push((y / x).ToString());
+
+                }
+
+             
+            }
+        }
+        if (stack.Count == 1)
+        {
+            double x = double.Parse(stack.Peek());
+            return x;
+        }
+        else
+        {
+            return null;
+        }
     }
 
 }
